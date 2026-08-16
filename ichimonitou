@@ -1,0 +1,926 @@
+# sekaishi[世界史一問一答.html](https://github.com/user-attachments/files/31110540/default.html)
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>世界史 一問一答</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap');
+
+  :root{
+    --bg-a:#161a25;
+    --bg-b:#10131c;
+    --surface:#232a3b;
+    --surface-2:#2a3247;
+    --ink:#f1e8d6;
+    --ink-dim:#9aa2b8;
+    --line:rgba(241,232,214,0.12);
+    --gold:#c9a15c;
+    --eu:#7fa0c4;
+    --me:#3fab9e;
+    --in:#e2933f;
+    --cn:#c8514c;
+    --ok:#5fbf83;
+    --bad:#e2665c;
+    --c: var(--gold);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  [hidden]{display:none !important;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100dvh;
+    background:radial-gradient(circle at 50% -10%, var(--bg-a), var(--bg-b) 65%);
+    color:var(--ink);
+    font-family:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;
+    overflow-x:hidden;
+  }
+  #app{
+    min-height:100dvh;
+    max-width:560px;
+    margin:0 auto;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    position:relative;
+  }
+
+  .screen{display:none; min-height:100dvh; flex-direction:column;}
+  .screen.active{display:flex;}
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:.14em;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin:0 0 10px;
+    font-weight:700;
+  }
+
+  /* ---------- HOME ---------- */
+  .home-head{padding:44px 24px 8px;}
+  .home-head h1{
+    font-family:'Shippori Mincho',serif;
+    font-weight:700;
+    font-size:clamp(26px,7vw,34px);
+    line-height:1.45;
+    margin:0;
+    letter-spacing:.02em;
+  }
+
+  .seal-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    padding:26px 20px 6px;
+  }
+
+  .seal-card{
+    --c: var(--gold);
+    appearance:none;
+    border:1px solid var(--line);
+    background:linear-gradient(160deg, var(--surface), var(--surface-2));
+    border-radius:20px;
+    padding:22px 14px 18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    color:var(--ink);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .seal-card::before{
+    content:'';
+    position:absolute;
+    inset:0 0 auto 0;
+    height:4px;
+    background:var(--c);
+    opacity:.85;
+  }
+  .seal-card:active{transform:scale(.96); border-color:var(--c);}
+
+  .seal-icon-wrap{
+    width:56px; height:56px;
+    border-radius:50%;
+    border:1.5px solid var(--c);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--c);
+    background:rgba(255,255,255,0.02);
+  }
+  .seal-icon{width:30px; height:30px;}
+
+  .seal-name{
+    font-family:'Shippori Mincho',serif;
+    font-size:19px;
+    font-weight:700;
+    letter-spacing:.03em;
+  }
+  .seal-count{
+    font-size:12px;
+    color:var(--ink-dim);
+    letter-spacing:.06em;
+  }
+
+  .random-btn{
+    appearance:none;
+    margin:18px 20px 0;
+    padding:16px;
+    border-radius:16px;
+    border:1px solid var(--gold);
+    background:transparent;
+    color:var(--gold);
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.04em;
+    cursor:pointer;
+  }
+  .random-btn:active{background:rgba(201,161,92,0.1);}
+
+  .home-foot{
+    margin-top:auto;
+    text-align:center;
+    padding:28px 20px 34px;
+    font-size:11px;
+    color:var(--ink-dim);
+    letter-spacing:.06em;
+  }
+
+  /* ---------- QUIZ ---------- */
+  .quiz-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 18px 0;
+  }
+  .exit-btn{
+    appearance:none;
+    width:36px; height:36px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink-dim);
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+  }
+  .quiz-meta{display:flex; align-items:center; gap:10px;}
+  .region-tag{
+    display:flex; align-items:center; gap:6px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.05em;
+    color:var(--c);
+    border:1px solid var(--c);
+    padding:5px 10px;
+    border-radius:999px;
+  }
+  .region-tag .tag-icon{width:13px; height:13px;}
+  .counter{
+    font-size:13px;
+    color:var(--ink-dim);
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.03em;
+  }
+
+  .progress-track{
+    margin:14px 18px 0;
+    height:3px;
+    border-radius:3px;
+    background:var(--line);
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:var(--c);
+    transition:width .25s ease;
+  }
+
+  .card-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:20px 20px 8px;
+  }
+  .card{
+    width:100%;
+    min-height:300px;
+    border-radius:24px;
+    border:1px solid var(--line);
+    background:linear-gradient(165deg, var(--surface), var(--surface-2));
+    box-shadow:0 0 0 1px rgba(0,0,0,0.15), 0 18px 40px -20px rgba(0,0,0,0.6), 0 0 32px -18px var(--c);
+    padding:30px 26px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+    position:relative;
+  }
+  .card::before{
+    content:'';
+    position:absolute; left:26px; top:26px;
+    width:26px; height:3px;
+    border-radius:3px;
+    background:var(--c);
+  }
+
+  .face-label{
+    margin:0 0 4px;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--ink-dim);
+  }
+
+  .face-text{
+    margin:0 0 22px;
+    font-family:'Shippori Mincho',serif;
+    font-weight:600;
+    font-size:clamp(19px,5.4vw,24px);
+    line-height:1.7;
+    letter-spacing:.01em;
+  }
+
+  @keyframes pop{
+    0%{opacity:0; transform:translateY(6px) scale(.98);}
+    100%{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .pop{animation:pop .22s ease-out;}
+
+  .answer-form{display:flex; gap:10px;}
+  .answer-input{
+    flex:1; min-width:0;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:13px 14px;
+    font-size:16px;
+    color:var(--ink);
+    font-family:'Zen Kaku Gothic New',sans-serif;
+  }
+  .answer-input:focus{outline:none; border-color:var(--c);}
+  .answer-input::placeholder{color:var(--ink-dim);}
+
+  .submit-btn{
+    appearance:none;
+    border:none;
+    border-radius:12px;
+    padding:0 18px;
+    background:var(--c);
+    color:#14161f;
+    font-weight:800;
+    font-size:14px;
+    letter-spacing:.03em;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .submit-btn:active{transform:scale(.97);}
+  .submit-btn:disabled{opacity:.5;}
+
+  .skip-link{
+    appearance:none;
+    background:none;
+    border:none;
+    color:var(--ink-dim);
+    font-size:12.5px;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    margin:14px auto 0;
+    cursor:pointer;
+    padding:0;
+  }
+
+  .result-badge{
+    margin:0 0 12px;
+    font-family:'Shippori Mincho',serif;
+    font-size:22px;
+    font-weight:800;
+  }
+  .result-badge.ok{color:var(--ok);}
+  .result-badge.bad{color:var(--bad);}
+
+  .result-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    padding:10px 0;
+    border-top:1px solid var(--line);
+    font-size:14px;
+  }
+  .result-key{color:var(--ink-dim); flex-shrink:0; padding-top:1px;}
+  .result-value{font-weight:700; text-align:right;}
+  .correct-row .result-value{color:var(--c);}
+  .user-row .result-value{color:var(--bad);}
+
+  .next-btn{
+    width:100%;
+    margin-top:16px;
+    padding:15px;
+    border-radius:14px;
+    border:none;
+    background:var(--c);
+    color:#14161f;
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:.03em;
+    cursor:pointer;
+  }
+  .next-btn:active{transform:scale(.98);}
+
+  /* ---------- END ---------- */
+  .end-inner{
+    margin:auto;
+    text-align:center;
+    padding:32px 30px;
+    width:100%;
+  }
+  .end-inner h2{
+    font-family:'Shippori Mincho',serif;
+    font-size:clamp(22px,6.5vw,28px);
+    margin:0 0 16px;
+  }
+  .end-score{
+    font-family:'Shippori Mincho',serif;
+    font-size:16px;
+    margin:0 0 26px;
+    color:var(--ink);
+  }
+  .end-score .num{font-size:32px; font-weight:800; color:var(--gold);}
+
+  .review-title{
+    text-align:left;
+    font-size:12px;
+    letter-spacing:.1em;
+    color:var(--ink-dim);
+    margin:0 0 8px;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .review-list{
+    max-height:230px;
+    overflow-y:auto;
+    border-top:1px solid var(--line);
+    margin-bottom:28px;
+    text-align:left;
+  }
+  .review-item{padding:12px 2px; border-bottom:1px solid var(--line);}
+  .review-q{font-size:13px; color:var(--ink-dim); margin:0 0 4px; line-height:1.5;}
+  .review-a{font-size:14px; font-weight:700; margin:0;}
+  .end-perfect{color:var(--ink-dim); font-size:13.5px; margin:0 0 28px;}
+
+  .end-actions{display:flex; flex-direction:column; gap:12px;}
+  .primary-btn,.ghost-btn{
+    appearance:none;
+    padding:16px;
+    border-radius:16px;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.04em;
+    cursor:pointer;
+  }
+  .primary-btn{border:1px solid var(--c); background:var(--c); color:#14161f;}
+  .ghost-btn{border:1px solid var(--line); background:transparent; color:var(--ink-dim);}
+
+  svg symbol, svg use{overflow:visible;}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="icon-eu" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="10" y="7" width="28" height="4"/>
+        <rect x="8" y="37" width="32" height="4"/>
+        <line x1="14" y1="12" x2="14" y2="37"/>
+        <line x1="20" y1="12" x2="20" y2="37"/>
+        <line x1="24" y1="12" x2="24" y2="37"/>
+        <line x1="28" y1="12" x2="28" y2="37"/>
+        <line x1="34" y1="12" x2="34" y2="37"/>
+      </g>
+    </symbol>
+    <symbol id="icon-me" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 40 V22 C10 12 16 8 24 8 C32 8 38 12 38 22 V40"/>
+        <line x1="6" y1="40" x2="42" y2="40"/>
+        <circle cx="24" cy="5.5" r="1.6" fill="currentColor" stroke="none"/>
+      </g>
+    </symbol>
+    <symbol id="icon-in" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="24" cy="24" r="16"/>
+        <circle cx="24" cy="24" r="2" fill="currentColor" stroke="none"/>
+        <line x1="24" y1="8" x2="24" y2="40"/>
+        <line x1="8" y1="24" x2="40" y2="24"/>
+        <line x1="12.7" y1="12.7" x2="35.3" y2="35.3"/>
+        <line x1="12.7" y1="35.3" x2="35.3" y2="12.7"/>
+      </g>
+    </symbol>
+    <symbol id="icon-cn" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 31 C9 25 16 23 18 27 C17 20 26 18 28 24 C34 21 39 26 36 32 C41 32 41 38 35 38 H15 C8 38 8 32 12 30 Z"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="app">
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="home-head">
+      <p class="eyebrow">世界史 一問一答 ・ 全100問</p>
+      <h1>地域を選んで<br>出題スタート</h1>
+    </div>
+
+    <div class="seal-grid">
+      <button class="seal-card" data-region="eu" style="--c:var(--eu)">
+        <span class="seal-icon-wrap"><svg class="seal-icon"><use href="#icon-eu"/></svg></span>
+        <span class="seal-name">ヨーロッパ</span>
+        <span class="seal-count">25問</span>
+      </button>
+      <button class="seal-card" data-region="me" style="--c:var(--me)">
+        <span class="seal-icon-wrap"><svg class="seal-icon"><use href="#icon-me"/></svg></span>
+        <span class="seal-name">中東</span>
+        <span class="seal-count">25問</span>
+      </button>
+      <button class="seal-card" data-region="in" style="--c:var(--in)">
+        <span class="seal-icon-wrap"><svg class="seal-icon"><use href="#icon-in"/></svg></span>
+        <span class="seal-name">インド</span>
+        <span class="seal-count">25問</span>
+      </button>
+      <button class="seal-card" data-region="cn" style="--c:var(--cn)">
+        <span class="seal-icon-wrap"><svg class="seal-icon"><use href="#icon-cn"/></svg></span>
+        <span class="seal-name">中国</span>
+        <span class="seal-count">25問</span>
+      </button>
+    </div>
+
+    <button id="randomAllBtn" class="random-btn">全100問をランダム出題</button>
+
+    <p class="home-foot">答えを入力して送信 → 正誤を確認 → 次の問題へ</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="quiz-top">
+      <button id="exitBtn" class="exit-btn" aria-label="ホームに戻る">×</button>
+      <div class="quiz-meta">
+        <span id="regionTag" class="region-tag"><svg class="tag-icon"><use id="regionTagIcon" href="#icon-eu"/></svg><span id="regionTagText"></span></span>
+        <span id="counter" class="counter"></span>
+      </div>
+    </div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="card-wrap">
+      <div id="card" class="card">
+        <p class="face-label">問題</p>
+        <p id="qText" class="face-text"></p>
+
+        <form id="answerForm" class="answer-form">
+          <input id="answerInput" class="answer-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="答えを入力" />
+          <button type="submit" class="submit-btn">こたえる</button>
+        </form>
+
+        <div id="resultPanel" class="result-panel" hidden>
+          <p id="resultBadge" class="result-badge"></p>
+          <p class="result-row correct-row"><span class="result-key">正解</span><span id="correctAnswerText" class="result-value"></span></p>
+          <p id="userAnswerRow" class="result-row user-row"><span class="result-key">あなたの解答</span><span id="userAnswerText" class="result-value"></span></p>
+          <button id="nextBtn" class="next-btn" type="button">次の問題へ</button>
+        </div>
+      </div>
+      <button id="skipBtn" class="skip-link" type="button">わからない（答えを見る）</button>
+    </div>
+  </section>
+
+  <!-- END -->
+  <section id="end" class="screen">
+    <div class="end-inner">
+      <p class="eyebrow">結果</p>
+      <h2 id="endTitle"></h2>
+      <p id="endScore" class="end-score"></p>
+      <p id="endPerfect" class="end-perfect" hidden>全問正解でした。お見事です！</p>
+      <p id="reviewTitle" class="review-title" hidden>復習：間違えた問題</p>
+      <div id="reviewList" class="review-list"></div>
+      <div class="end-actions">
+        <button id="retryBtn" class="primary-btn">もう一度</button>
+        <button id="homeBtn" class="ghost-btn">地域を選び直す</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var REGIONS = {
+    eu: { name:'ヨーロッパ', color:'var(--eu)', icon:'#icon-eu' },
+    me: { name:'中東',       color:'var(--me)', icon:'#icon-me' },
+    in: { name:'インド',     color:'var(--in)', icon:'#icon-in' },
+    cn: { name:'中国',       color:'var(--cn)', icon:'#icon-cn' }
+  };
+
+  var DATA = [
+    {r:'eu', q:'打製石器を使っていた、人類進化の最初の段階を何という？', a:'猿人'},
+    {r:'eu', q:'北京原人やジャワ原人に代表される、洞穴に住んだ人類の段階は？', a:'原人'},
+    {r:'eu', q:'死者を埋葬して弔うようになったのは何人の段階から？', a:'旧人'},
+    {r:'eu', q:'洞穴に壁画を描いた、現生人類にあたる段階を何という？', a:'新人（ホモ・サピエンス）'},
+    {r:'eu', q:'メソポタミア文明が成立したのはおよそ何年頃？', a:'前3500年頃'},
+    {r:'eu', q:'アテネで、僭主になりうる人物を10年間追放した制度は？', a:'陶片追放'},
+    {r:'eu', q:'軍事教育を徹底し、周辺住民を奴隷として支配したポリスは？', a:'スパルタ'},
+    {r:'eu', q:'ペルシア戦争でアテネ・スパルタが撃退した帝国は？', a:'アケメネス朝ペルシア'},
+    {r:'eu', q:'重装歩兵と騎馬隊を分ける軍事革命を起こしたマケドニア王は？', a:'フィリッポス2世'},
+    {r:'eu', q:'東方遠征を行い、ペルシアまで進出したマケドニアの王は？', a:'アレクサンドロス大王'},
+    {r:'eu', q:'ギリシャ文化と東方文化が融合して生まれた文化は？', a:'ヘレニズム文化'},
+    {r:'eu', q:'象を率いてアルプスを越えたカルタゴの将軍は？', a:'ハンニバル'},
+    {r:'eu', q:'「賽は投げられた」と言ってルビコン川を渡ったのは誰？', a:'カエサル'},
+    {r:'eu', q:'カエサルが暗殺された際の言葉「〇〇、お前もか」の〇〇は？', a:'ブルータス'},
+    {r:'eu', q:'カエサルの養子で、初代ローマ皇帝に就任したのは誰？', a:'オクタウィアヌス（アウグストゥス）'},
+    {r:'eu', q:'ミラノ勅令でキリスト教を公認したローマ皇帝は？', a:'コンスタンティヌス帝'},
+    {r:'eu', q:'五賢帝最後の皇帝で、ストア派の哲学者でもあったのは？', a:'マルクス＝アウレリウス＝アントニヌス'},
+    {r:'eu', q:'476年に滅亡したのは西・東どちらのローマ帝国？', a:'西ローマ帝国'},
+    {r:'eu', q:'800年、ローマ教皇から戴冠を受けたフランク王は？', a:'カール大帝'},
+    {r:'eu', q:'神聖ローマ皇帝が教皇に3日間謝罪した事件は？', a:'カノッサの屈辱'},
+    {r:'eu', q:'第3回十字軍でリチャード1世と戦ったイスラムの武将は？', a:'サラディン'},
+    {r:'eu', q:'イギリス貴族がジョン王に突きつけた文書は？', a:'マグナ＝カルタ（大憲章）'},
+    {r:'eu', q:'1295年に招集され、議会政治の発展につながった議会は？', a:'模範議会'},
+    {r:'eu', q:'劣勢だったフランスを救い、オルレアンを解放した少女は？', a:'ジャンヌ＝ダルク'},
+    {r:'eu', q:'百年戦争が行われたのは何年から何年？', a:'1337年〜1453年'},
+
+    {r:'me', q:'クフ王のピラミッドが建てられたのは何文明？', a:'エジプト文明'},
+    {r:'me', q:'「目には目を、歯には歯を」の復讐法を定めた法典は？', a:'ハンムラビ法典'},
+    {r:'me', q:'過酷な統治で恨みを買い、急速に滅んだ古代オリエントの帝国は？', a:'アッシリア'},
+    {r:'me', q:'アケメネス朝ペルシアで征服地の統治を任された知事の呼称は？', a:'サトラップ'},
+    {r:'me', q:'アケメネス朝ペルシアを滅ぼしたのは誰？', a:'アレクサンドロス大王'},
+    {r:'me', q:'ビザンツ帝国と抗争を続けたイランの王朝は？', a:'ササン朝ペルシア'},
+    {r:'me', q:'イスラム教の開祖は誰？', a:'ムハンマド'},
+    {r:'me', q:'ムハンマドがメッカからメディナへ移ったことを何という？', a:'ヒジュラ（聖遷）'},
+    {r:'me', q:'イスラム教における指導者（後継者）の呼称は？', a:'カリフ'},
+    {r:'me', q:'ウマイヤ朝を正統とする多数派は何派？', a:'スンナ派'},
+    {r:'me', q:'アリーとその子孫を正統とする少数派は何派？', a:'シーア派'},
+    {r:'me', q:'円形都市バグダードを首都とした王朝は？', a:'アッバース朝'},
+    {r:'me', q:'『千夜一夜物語』の主人公のモデルとされるアッバース朝のカリフは？', a:'ハールーン＝アッラシード'},
+    {r:'me', q:'セルジューク朝でカリフに代わって用いられた君主の称号は？', a:'スルタン'},
+    {r:'me', q:'サラディンが建国したエジプトの王朝は？', a:'アイユーブ朝'},
+    {r:'me', q:'チンギス＝ハンの孫フレグが建てた国は？', a:'イル＝ハン国'},
+    {r:'me', q:'盗賊団出身と言われ、明への遠征途中で死去した人物は？', a:'ティムール'},
+    {r:'me', q:'コンスタンティノープルを陥落させたオスマン帝国のスルタンは？', a:'メフメト2世'},
+    {r:'me', q:'コンスタンティノープルは陥落後、何という都市名に改称された？', a:'イスタンブール'},
+    {r:'me', q:'1529年に第1次ウィーン包囲を行ったオスマン帝国のスルタンは？', a:'スレイマン1世'},
+    {r:'me', q:'ビザンツ帝国の国教は何？', a:'ギリシャ正教'},
+    {r:'me', q:'セルジューク朝によるエルサレム占領がきっかけで始まった遠征は？', a:'十字軍'},
+    {r:'me', q:'ムハンマドはイスラム教を始める前、どんな職業だった？', a:'商人'},
+    {r:'me', q:'正統カリフ時代の第4代カリフで、暗殺されたのは誰？', a:'アリー'},
+    {r:'me', q:'オスマン帝国は何系の民族による国家？', a:'トルコ系'},
+
+    {r:'in', q:'インダス文明の担い手とされる民族は？', a:'ドラヴィダ人'},
+    {r:'in', q:'前1500年頃インドに流入し、鉄器をもたらした民族は？', a:'アーリヤ人'},
+    {r:'in', q:'バラモン教のもとになった聖典は？', a:'ヴェーダ'},
+    {r:'in', q:'カースト制度で司祭・僧侶にあたる身分は？', a:'バラモン'},
+    {r:'in', q:'仏教の開祖は誰？', a:'ブッダ（釈迦）'},
+    {r:'in', q:'仏教よりも徹底した禁欲・不殺生を説いた宗教は？', a:'ジャイナ教'},
+    {r:'in', q:'仏教を統治に利用した、マウリヤ朝の名君は？', a:'アショーカ王'},
+    {r:'in', q:'カニシカ王の時代に最盛期を迎えた王朝は？', a:'クシャーナ朝'},
+    {r:'in', q:'クシャーナ朝で発達した、西洋の影響を受けた仏教美術は？', a:'ガンダーラ美術'},
+    {r:'in', q:'グプタ朝で復権し、確立した宗教は？', a:'ヒンドゥー教'},
+    {r:'in', q:'グプタ朝時代に編纂された二大叙事詩は？', a:'『ラーマーヤナ』と『マハーバーラタ』'},
+    {r:'in', q:'ハルシャ＝ヴァルダナの時代にインドを訪れた唐の僧は？', a:'玄奘'},
+    {r:'in', q:'玄奘がインドまで学びに訪れたのは何の教え？', a:'仏教'},
+    {r:'in', q:'トルコ系奴隷出身のアイバクが建てた王朝は？', a:'奴隷王朝'},
+    {r:'in', q:'ムガル帝国の初代皇帝は誰？', a:'バーブル'},
+    {r:'in', q:'バーブルの父方の祖先とされる人物は？', a:'チンギス＝ハン'},
+    {r:'in', q:'「ムガル」という国名の語源は？', a:'モンゴル'},
+    {r:'in', q:'ヒンドゥー教徒への人頭税（ジズヤ）を廃止した第3代皇帝は？', a:'アクバル'},
+    {r:'in', q:'タージ＝マハルを建てた第5代皇帝は？', a:'シャー＝ジャハーン'},
+    {r:'in', q:'タージ＝マハルは誰の墓として建てられた？', a:'ムムターズ＝マハル'},
+    {r:'in', q:'融和政策を停止し人頭税を復活させた第6代皇帝は？', a:'アウラングゼーブ'},
+    {r:'in', q:'アウラングゼーブの厳格な政策に反発し反乱を起こした宗教勢力は？', a:'ヒンドゥー教徒'},
+    {r:'in', q:'インダス文字は現在どのような状態にある？', a:'未解読'},
+    {r:'in', q:'カースト制度で王族・士族にあたる身分は？', a:'クシャトリヤ'},
+    {r:'in', q:'インドにおけるイスラム教とヒンドゥー教の対立を、後に統治に利用した国は？', a:'イギリス'},
+
+    {r:'cn', q:'黄河文明と対をなす、中国南方の文明は？', a:'長江文明'},
+    {r:'cn', q:'殷（商）で用いられた文字は？', a:'甲骨文字'},
+    {r:'cn', q:'儒学・儒教を説いた春秋時代の思想家は？', a:'孔子'},
+    {r:'cn', q:'法家を代表する思想家は？', a:'韓非'},
+    {r:'cn', q:'兼愛（博愛）を説いた墨家の思想家は？', a:'墨子'},
+    {r:'cn', q:'中国を初めて統一した皇帝は？', a:'始皇帝'},
+    {r:'cn', q:'始皇帝が各地の城壁をつなげて築いた防壁は？', a:'万里の長城'},
+    {r:'cn', q:'始皇帝による儒者弾圧の事件を何という？', a:'焚書坑儒'},
+    {r:'cn', q:'農民出身で前漢を建国した皇帝は？', a:'劉邦（高祖）'},
+    {r:'cn', q:'項羽が部下に裏切られ孤立した状況を表す言葉は？', a:'四面楚歌'},
+    {r:'cn', q:'前漢で儒教を国教として公認した皇帝は？', a:'武帝'},
+    {r:'cn', q:'前漢を簒奪して新を建てた人物は？', a:'王莽'},
+    {r:'cn', q:'後漢を建国した皇帝は？', a:'光武帝'},
+    {r:'cn', q:'208年、曹操の大軍が劉備・孫権連合軍に敗れた戦いは？', a:'赤壁の戦い'},
+    {r:'cn', q:'三国時代のうち、曹操の勢力が築いた国は？', a:'魏'},
+    {r:'cn', q:'魏に代わって中国を再統一し、西晋を建てた人物は？', a:'司馬炎'},
+    {r:'cn', q:'隋で創設された官僚登用試験制度は？', a:'科挙'},
+    {r:'cn', q:'黄河と長江を結ぶ大運河を建設した隋の皇帝は？', a:'煬帝'},
+    {r:'cn', q:'「貞観の治」と呼ばれる名君政治を行った唐の皇帝は？', a:'太宗（李世民）'},
+    {r:'cn', q:'中国史上唯一の女帝は？', a:'則天武后'},
+    {r:'cn', q:'玄宗が寵愛し、安史の乱の一因ともされる人物は？', a:'楊貴妃'},
+    {r:'cn', q:'武断政治を嫌い文治主義をとった、宋の建国者は？', a:'趙匡胤（太祖）'},
+    {r:'cn', q:'国号を元と改め、中国を支配したモンゴル帝国の皇帝は？', a:'フビライ＝ハン'},
+    {r:'cn', q:'農民出身で明を建国した皇帝は？', a:'朱元璋（洪武帝）'},
+    {r:'cn', q:'清の最大版図を築き、「十全老人」と自称した皇帝は？', a:'乾隆帝'}
+  ];
+
+  // ---------- answer matching ----------
+  function normalize(s){
+    if (!s) return '';
+    s = String(s).trim().replace(/\s+/g,'');
+    s = s.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(ch){ return String.fromCharCode(ch.charCodeAt(0)-0xFEE0); });
+    s = s.replace(/[『』「」・,，.。、!！?？'"’”ー\-]/g,'');
+    s = s.replace(/＝/g,'');
+    s = s.replace(/[()（）]/g,'');
+    return s.toLowerCase();
+  }
+
+  function buildAccepted(rawAnswer){
+    var works = rawAnswer.match(/『[^』]*』/g);
+    if (works && works.length >= 2){
+      return { type:'multi', parts: works.map(function(w){ return normalize(w.replace(/[『』]/g,'')); }) };
+    }
+    if (/〜/.test(rawAnswer) && (rawAnswer.match(/\d+/g)||[]).length >= 2){
+      return { type:'range', nums: rawAnswer.match(/\d+/g) };
+    }
+    var set = new Set();
+    function add(str){ var n = normalize(str); if (n) set.add(n); }
+
+    var parenMatch = rawAnswer.match(/[（(]([^）)]*)[）)]/);
+    var base = rawAnswer.replace(/[（(][^）)]*[）)]/, '').trim();
+    add(base); add(rawAnswer);
+    if (parenMatch) add(parenMatch[1]);
+
+    base.split('＝').forEach(function(p){ if (p && p.length >= 2) add(p); });
+    if (parenMatch) parenMatch[1].split('＝').forEach(function(p){ if (p && p.length >= 2) add(p); });
+
+    if (/\d/.test(base)){
+      var m = base.match(/\d+/);
+      if (m){
+        var num = m[0];
+        ['前'+num+'年頃','前'+num+'年','前'+num, num+'年頃', num+'年', num].forEach(add);
+      }
+    }
+    return { type:'set', set: set };
+  }
+
+  function isCorrect(userInput, rawAnswer){
+    var accepted = buildAccepted(rawAnswer);
+    var n = normalize(userInput);
+    if (!n) return false;
+
+    if (accepted.type === 'multi'){
+      return accepted.parts.every(function(p){ return n.indexOf(p) !== -1; });
+    }
+    if (accepted.type === 'range'){
+      var inputNums = String(userInput).match(/\d+/g) || [];
+      return accepted.nums.every(function(num){ return inputNums.indexOf(num) !== -1; });
+    }
+    if (accepted.set.has(n)) return true;
+    if (n.length >= 2){
+      var found = false;
+      accepted.set.forEach(function(c){
+        if (found) return;
+        if (c.length >= 2 && (n.indexOf(c) !== -1 || c.indexOf(n) !== -1)) found = true;
+      });
+      return found;
+    }
+    return false;
+  }
+
+  // ---------- state ----------
+  var state = { region:'all', queue:[], index:0, phase:'answering', results:[] };
+
+  var el = {
+    home: document.getElementById('home'),
+    quiz: document.getElementById('quiz'),
+    end: document.getElementById('end'),
+    quizTop: document.querySelector('.quiz-top'),
+    card: document.getElementById('card'),
+    qText: document.getElementById('qText'),
+    answerForm: document.getElementById('answerForm'),
+    answerInput: document.getElementById('answerInput'),
+    submitBtn: document.querySelector('.submit-btn'),
+    skipBtn: document.getElementById('skipBtn'),
+    resultPanel: document.getElementById('resultPanel'),
+    resultBadge: document.getElementById('resultBadge'),
+    correctAnswerText: document.getElementById('correctAnswerText'),
+    userAnswerRow: document.getElementById('userAnswerRow'),
+    userAnswerText: document.getElementById('userAnswerText'),
+    nextBtn: document.getElementById('nextBtn'),
+    counter: document.getElementById('counter'),
+    progressFill: document.getElementById('progressFill'),
+    regionTag: document.getElementById('regionTag'),
+    regionTagIcon: document.getElementById('regionTagIcon'),
+    regionTagText: document.getElementById('regionTagText'),
+    endTitle: document.getElementById('endTitle'),
+    endScore: document.getElementById('endScore'),
+    endPerfect: document.getElementById('endPerfect'),
+    reviewTitle: document.getElementById('reviewTitle'),
+    reviewList: document.getElementById('reviewList')
+  };
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function showScreen(name){
+    [el.home, el.quiz, el.end].forEach(function(s){ s.classList.remove('active'); });
+    var target = name === 'home' ? el.home : (name === 'quiz' ? el.quiz : el.end);
+    target.classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  function pop(node){
+    node.classList.remove('pop');
+    void node.offsetWidth;
+    node.classList.add('pop');
+  }
+
+  function startQuiz(region){
+    state.region = region;
+    var pool = region === 'all' ? DATA : DATA.filter(function(d){ return d.r === region; });
+    state.queue = shuffle(pool);
+    state.index = 0;
+    state.results = [];
+    showScreen('quiz');
+    renderCard();
+  }
+
+  function currentItem(){ return state.queue[state.index]; }
+
+  function renderCard(){
+    var item = currentItem();
+    var meta = REGIONS[item.r];
+
+    el.card.style.setProperty('--c', meta.color);
+    el.quizTop.style.setProperty('--c', meta.color);
+    el.regionTag.style.setProperty('--c', meta.color);
+    el.regionTagIcon.setAttribute('href', meta.icon);
+    el.regionTagText.textContent = meta.name;
+
+    el.counter.textContent = (state.index + 1) + ' / ' + state.queue.length;
+    el.progressFill.style.width = (state.index / state.queue.length * 100) + '%';
+    el.progressFill.style.background = meta.color;
+
+    el.qText.textContent = item.q;
+    pop(el.qText);
+
+    state.phase = 'answering';
+    el.answerInput.value = '';
+    el.answerInput.disabled = false;
+    el.submitBtn.disabled = false;
+    el.answerForm.hidden = false;
+    el.skipBtn.hidden = false;
+    el.resultPanel.hidden = true;
+
+    setTimeout(function(){ el.answerInput.focus(); }, 30);
+  }
+
+  function grade(userValue, isSkip){
+    if (state.phase !== 'answering') return;
+    var item = currentItem();
+    var correct = !isSkip && isCorrect(userValue, item.a);
+
+    state.phase = 'result';
+    el.answerInput.disabled = true;
+    el.submitBtn.disabled = true;
+    el.answerForm.hidden = true;
+    el.skipBtn.hidden = true;
+
+    el.resultBadge.textContent = correct ? '○ 正解！' : (isSkip ? '△ スキップ' : '✕ 不正解');
+    el.resultBadge.className = 'result-badge ' + (correct ? 'ok' : 'bad');
+    el.correctAnswerText.textContent = item.a;
+
+    if (correct){
+      el.userAnswerRow.hidden = true;
+      el.userAnswerText.textContent = '';
+    } else {
+      el.userAnswerRow.hidden = false;
+      el.userAnswerText.textContent = isSkip ? 'スキップ' : userValue;
+    }
+
+    el.resultPanel.hidden = false;
+    pop(el.resultPanel);
+    el.nextBtn.focus();
+
+    state.results.push({ r:item.r, q:item.q, a:item.a, correct:correct });
+  }
+
+  function nextQuestion(){
+    state.index++;
+    if (state.index >= state.queue.length){
+      finishQuiz();
+      return;
+    }
+    renderCard();
+  }
+
+  function finishQuiz(){
+    var meta = REGIONS[state.region];
+    var accentColor = state.region === 'all' ? 'var(--gold)' : meta.color;
+
+    if (state.region === 'all'){
+      el.endTitle.textContent = '全100問 制覇！';
+    } else {
+      el.endTitle.textContent = '『' + meta.name + '』25問 制覇！';
+    }
+    el.end.querySelector('.eyebrow').style.color = accentColor;
+    document.getElementById('retryBtn').style.setProperty('--c', accentColor);
+
+    var correctCount = state.results.filter(function(r){ return r.correct; }).length;
+    var total = state.queue.length;
+    el.endScore.innerHTML = '<span class="num">' + correctCount + '</span> / ' + total + ' 正解';
+
+    var misses = state.results.filter(function(r){ return !r.correct; });
+    el.reviewList.innerHTML = '';
+    if (misses.length === 0){
+      el.endPerfect.hidden = false;
+      el.reviewTitle.hidden = true;
+    } else {
+      el.endPerfect.hidden = true;
+      el.reviewTitle.hidden = false;
+      misses.forEach(function(m){
+        var item = document.createElement('div');
+        item.className = 'review-item';
+        var q = document.createElement('p');
+        q.className = 'review-q';
+        q.textContent = m.q;
+        var a = document.createElement('p');
+        a.className = 'review-a';
+        a.style.color = REGIONS[m.r].color;
+        a.textContent = m.a;
+        item.appendChild(q);
+        item.appendChild(a);
+        el.reviewList.appendChild(item);
+      });
+    }
+
+    showScreen('end');
+  }
+
+  // ---------- events ----------
+  document.querySelectorAll('.seal-card').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      startQuiz(btn.getAttribute('data-region'));
+    });
+  });
+
+  document.getElementById('randomAllBtn').addEventListener('click', function(){
+    startQuiz('all');
+  });
+
+  el.answerForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var val = el.answerInput.value.trim();
+    if (!val){ el.answerInput.focus(); return; }
+    grade(val, false);
+  });
+
+  el.skipBtn.addEventListener('click', function(){
+    grade('', true);
+  });
+
+  el.nextBtn.addEventListener('click', function(){
+    nextQuestion();
+  });
+
+  el.card.addEventListener('click', function(e){
+    if (state.phase === 'result' && !e.target.closest('#nextBtn')){
+      nextQuestion();
+    }
+  });
+
+  document.getElementById('exitBtn').addEventListener('click', function(){
+    showScreen('home');
+  });
+
+  document.getElementById('retryBtn').addEventListener('click', function(){
+    startQuiz(state.region);
+  });
+
+  document.getElementById('homeBtn').addEventListener('click', function(){
+    showScreen('home');
+  });
+
+})();
+</script>
+</body>
+</html>
